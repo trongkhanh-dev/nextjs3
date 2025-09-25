@@ -6,17 +6,17 @@ export default function Home() {
   return (
     <>
       <h1>Welcome to my website</h1>
-      <form
+      {/* <form
         className="px-10 pt-[100px]"
         action={async () => {
           "use server";
-          await signOut({ redirectTo: ROUTES.SIGN_OUT });
+          await signOut({ redirectTo: ROUTES.SIGN_UP });
         }}
       >
         <Button className="cursor-pointer  bg-white text-black" type="submit">
-          Signout with GitHub
+          Sign out
         </Button>
-      </form>
+      </form> */}
     </>
   );
 }
