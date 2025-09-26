@@ -4,6 +4,11 @@ export const sidebarLinks = [
     label: "Home",
     route: "/",
   },
+  {
+    imgURL: "/icons/user.svg",
+    label: "Profile",
+    route: "/profile",
+  },
 
   {
     imgURL: "/icons/users.svg",
@@ -20,22 +25,14 @@ export const sidebarLinks = [
     label: "Collections",
     route: "/collection",
   },
-
+  {
+    imgURL: "/icons/tag.svg",
+    label: "Tags",
+    route: "/tags",
+  },
   {
     imgURL: "/icons/question.svg",
     label: "Ask a question",
     route: "/ask-question",
   },
-
-  // {
-  //   imgURL: "/icons/profile",
-  //   label: "Ask a question",
-  //   route: "/ask-question",
-  // },
-
-  // {
-  //   imgURL: "/icons/tags",
-  //   label: "Ask a question",
-  //   route: "/ask-question",
-  // },
 ];
