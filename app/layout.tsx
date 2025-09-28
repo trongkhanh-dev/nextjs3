@@ -6,6 +6,7 @@ import Navbar from "@/components/navigation/navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { NuqsAdapter } from "nuqs/adapters/next/pages";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,7 +50,7 @@ const RootLayout = async ({
             disableTransitionOnChange
           >
             <Navbar />
-            {children}
+            <NuqsAdapter>{children}</NuqsAdapter>
             <Toaster />
           </ThemeProvider>
         </body>
