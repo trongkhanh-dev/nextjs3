@@ -58,7 +58,7 @@ const LocalSearch = ({ route, imgSrc, placeholder }: Props) => {
       />
       <Input
         ref={inputRef}
-        className="paragraph-regular no-focus placeholder text-dark400_light700 border-none shadow-none outline-none"
+        className="paragraph-regular no-focus placeholder text-dark-500  border-none shadow-none outline-none"
         type="text"
         placeholder={placeholder}
         value={searchQuery}

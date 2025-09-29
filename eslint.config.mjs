@@ -19,6 +19,7 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
     ],
+    overrides: [{ files: ["*.ts", "*.tsx"], rules: { "no-undef": "off" } }],
   },
 ];
 

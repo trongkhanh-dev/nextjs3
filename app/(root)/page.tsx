@@ -1,4 +1,5 @@
-import { signOut } from "@/auth";
+import QuestionCard from "@/components/cards/QuestionCard";
+import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
@@ -12,7 +13,12 @@ const questions = [
       { _id: "1", name: "React" },
       { _id: "2", name: "Javascript" },
     ],
-    author: { _id: "1", name: "John" },
+    author: {
+      _id: "1",
+      name: "John",
+      image:
+        "https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001877.png",
+    },
     upvotes: 10,
     answers: 5,
     views: 100,
@@ -23,10 +29,15 @@ const questions = [
     title: "How to learn Redux?",
     description: "I want to learn React, can anyone",
     tags: [
-      { _id: "1", name: "React" },
+      { _id: "1", name: "Redux" },
       { _id: "2", name: "Javascript" },
     ],
-    author: { _id: "1", name: "John" },
+    author: {
+      _id: "1",
+      name: "John",
+      image:
+        "https://static.vecteezy.com/system/resources/previews/004/899/680/non_2x/beautiful-blonde-woman-with-makeup-avatar-for-a-beauty-salon-illustration-in-the-cartoon-style-vector.jpg",
+    },
     upvotes: 10,
     answers: 5,
     views: 100,
@@ -39,11 +50,20 @@ interface SearchParams {
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
-  const { query } = await searchParams;
-  const filterQuestions = questions.filter((question) =>
-    question.title.toLowerCase().includes(query?.toLowerCase())
-  );
+  const { query = "", filter = "" } = await searchParams;
+  const filterQuestions = questions.filter((question) => {
+    const matchesQuery = query
+      ? question.title.toLowerCase().includes(query.toLowerCase())
+      : true;
 
+    const matchesFilter = filter
+      ? question.tags.some(
+          (tag) => tag.name.toLowerCase() === filter.toLowerCase()
+        )
+      : true;
+
+    return matchesQuery && matchesFilter;
+  });
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -62,9 +82,10 @@ const Home = async ({ searchParams }: SearchParams) => {
           placeholder="Search..."
         />
       </section>
+      <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
         {filterQuestions.map((question) => (
-          <h1 key={question._id}>{question.title}</h1>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
 
@@ -84,3 +105,48 @@ const Home = async ({ searchParams }: SearchParams) => {
 };
 
 export default Home;
+
+// ("use client");
+// import { useQueryState } from "nuqs";
+// import { cn } from "@/lib/utils";
+// import { Button } from "../ui/button";
+
+// const filters = [
+//   { name: "React", value: "react" },
+//   { name: "JavaScript", value: "javascript" },
+// ];
+
+// export function HomeFilters() {
+//   const [active, setActive] = useQueryState("filter", {
+//     defaultValue: "",
+//     parse: (value) => value as string,
+//     shallow: false,
+//   });
+
+//   const handleTypeClick = (value: string) => {
+//     if (active === value) {
+//       setActive("");
+//     } else {
+//       setActive(value);
+//     }
+//   };
+
+//   return (
+//     <div className="mt-10 hidden flex-wrap gap-3 sm:flex">
+//       {filters.map((filter) => (
+//         <Button
+//           key={filter.name}
+//           onClick={() => handleTypeClick(filter.value)}
+//           className={cn(
+//             `body-medium rounded-lg px-6 py-3 capitalize shadow-none`,
+//             active === filter.value
+//               ? "bg-primary-100 text-primary-500 hover:bg-primary-100 dark:bg-dark-400 dark:text-primary-500 dark:hover:bg-dark-400"
+//               : "bg-light-800 text-light-500 hover:bg-light-800 dark:bg-dark-300 dark:text-light-500 dark:hover:bg-dark-300"
+//           )}
+//         >
+//           {filter.name}
+//         </Button>
+//       ))}
+//     </div>
+//   );
+// }
