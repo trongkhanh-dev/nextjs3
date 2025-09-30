@@ -11,17 +11,20 @@ export interface IUser {
   reputation?: string;
 }
 
-const UserSchema = new Schema({
-  name: { type: String, required: true },
-  username: { type: String, required: true },
-  email: { type: String, required: true },
-  bio: { type: String },
-  image: { type: String, required: true },
-  location: { type: String },
-  portfolio: { type: String },
-  reputation: { type: Number, default: 0 },
-});
+const UserSchema = new Schema<IUser>(
+  {
+    name: { type: String, required: true },
+    username: { type: String, required: true },
+    email: { type: String, required: true },
+    bio: { type: String },
+    image: { type: String, required: true },
+    location: { type: String },
+    portfolio: { type: String },
+    reputation: { type: Number, default: 0 },
+  },
+  { timestamps: true }
+);
 
-const User = models?.user || model<IUser>("User", UserSchema);
+const User = models?.User || model<IUser>("User", UserSchema);
 
 export default User;
