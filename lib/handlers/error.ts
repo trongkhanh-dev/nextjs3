@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { RequestError, ValidationError } from "../http-errors";
 import { ZodError, z } from "zod"; // import z để dùng z.treeifyError()
+import logger from "./logger";
 
 export type ResponseType = "api" | "server";
 
@@ -57,6 +58,7 @@ const handleError = (error: unknown, responseType: ResponseType = "server") => {
   }
 
   if (error instanceof Error) {
+    // logger(error.message);
     return formatResponse(responseType, 500, error.message);
   }
 };
