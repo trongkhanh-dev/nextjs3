@@ -23,7 +23,7 @@ export const sidebarLinks = [
   {
     imgURL: "/icons/star.svg",
     label: "Collections",
-    route: "/collection",
+    route: "/collections",
   },
   {
     imgURL: "/icons/tag.svg",
