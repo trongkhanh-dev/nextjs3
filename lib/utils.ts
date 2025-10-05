@@ -14,9 +14,17 @@ export const getDeviconClassName = (techName: string) => {
     : "devicon-devicon-plain";
 };
 
-export const getTimeStamp = (date: Date): string => {
+export const getTimeStamp = (date: Date | string | number | null | undefined): string => {
+  // Normalize various input types to a valid Date instance
+  const inputDate =
+    date instanceof Date ? date : date ? new Date(date) : undefined;
+
+  if (!inputDate || isNaN(inputDate.getTime())) {
+    return "just now";
+  }
+
   const now = new Date();
-  const secondsAgo = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const secondsAgo = Math.floor((now.getTime() - inputDate.getTime()) / 1000);
 
   if (secondsAgo < 60) {
     return `${secondsAgo} second${secondsAgo !== 1 ? "s" : ""} ago`;

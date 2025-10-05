@@ -15,11 +15,11 @@ const filters = [
     value: "popular",
   },
   {
-    name: "React",
+    name: "Unanswered",
     value: "unanswered",
   },
   {
-    name: "Redux",
+    name: "Recommended",
     value: "recommended",
   },
 ];

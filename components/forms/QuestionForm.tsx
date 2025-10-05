@@ -1,9 +1,10 @@
 "use client";
 
+import { ReloadIcon } from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import dynamic from "next/dynamic";
-import React, { useRef } from "react";
+import React, { useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -21,20 +22,32 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import ROUTES from "@/constants/routes";
+import { IQuestionCard } from "@/types/global";
 
 const Editor = dynamic(() => import("@/components/editors"), {
   ssr: false,
 });
 
-const QuestionForm = () => {
+const QuestionForm = ({
+  question,
+  isEdit = false,
+}: {
+  question?: IQuestionCard;
+  isEdit?: boolean;
+}) => {
+  const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
 
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      tags: [],
+      title: question?.title || "",
+      content: question?.content || "",
+      tags: question?.tags.map((tag) => tag.name) || [],
     },
   });
 
@@ -78,10 +91,33 @@ const QuestionForm = () => {
     }
   };
 
-  const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
-    console.log(data);
+  const handleCreateQuestion = async (
+    data: z.infer<typeof AskQuestionSchema>
+  ) => {
+    startTransition(async () => {
+      if (isEdit && question) {
+        const result = await editQuestion({
+          questionId: String(question?._id),
+          ...data,
+        });
+        if (result.success) {
+          toast.success("Question updated successfully");
+          router.push(ROUTES.QUESTION(String(result.data?._id!)));
+        } else {
+          toast.error(`${result.error?.message}`);
+        }
+        return;
+      }
+      const result = await createQuestion(data);
+      if (result.success) {
+        toast.success("Question created successfully");
+        router.push(ROUTES.QUESTION(result.data?._id!));
+      } else {
+        toast.error(`${result.error?.message}` || "Some thing went wrong");
+      }
+    });
   };
-
+  const [isPending, startTransition] = useTransition();
   return (
     <Form {...form}>
       <form
@@ -179,8 +215,15 @@ const QuestionForm = () => {
           <Button
             type="submit"
             className="primary-gradient w-fit !text-light-900"
+            disabled={isPending}
           >
-            Ask A Question
+            {isPending ? (
+              <>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+              </>
+            ) : (
+              <>{isEdit ? "Edit" : "Ask A Question"}</>
+            )}
           </Button>
         </div>
       </form>

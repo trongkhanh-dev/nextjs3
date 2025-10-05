@@ -10,7 +10,7 @@ interface Props {
   question: IQuestionCard["question"];
 }
 const QuestionCard = ({ question }: Props) => {
-  const { _id, title, tags, author, createAt, upvotes, answers, views } =
+  const { _id, title, tags, author, createdAt, upvotes, answers, views } =
     question;
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11 dark:!bg-dark-500">
@@ -23,7 +23,7 @@ const QuestionCard = ({ question }: Props) => {
             </h3>
           </Link>
           <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
-            {getTimeStamp(createAt)}
+            {getTimeStamp(createdAt)}
           </span>
         </div>
       </div>
@@ -37,7 +37,7 @@ const QuestionCard = ({ question }: Props) => {
           imageUrl={author.image}
           alt={author.name}
           value={author.name}
-          title={`• Ask ${getTimeStamp(createAt)}`}
+          title={`• Ask ${getTimeStamp(createdAt)}`}
           href={ROUTES.PROFILE(author._id)}
           textStyle="body-medium text-dark400_light700"
           isAuthor

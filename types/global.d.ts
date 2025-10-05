@@ -11,18 +11,17 @@ interface IAuthorQuestion {
   image: string;
 }
 
-export interface IQuestionCard {
-  question: {
-    _id: string;
-    title: string;
-    description: string;
-    tags: ITagQuestion[];
-    author: IAuthor;
-    createAt: Date;
-    upvotes: number;
-    answers: number;
-    views: numbers;
-  };
+interface IQuestionCard {
+  _id: string;
+  title: string;
+  content: string;
+  description: string;
+  tags: ITagQuestion[];
+  author: IAuthorQuestion;
+  createdAt: Date | string;
+  upvotes: number;
+  answers: number;
+  views: number;
 }
 
 export type ActionResponse<T = null> = {
@@ -41,3 +40,16 @@ export type APIErrorResponse = NextResponse<ErrorResponse>;
 export type APIResponse<T = null> = NextResponse<
   SuccessResponse<T> | ErrorResponse
 >;
+
+interface RouteParams {
+  params: Promise<Record<string, string>>;
+  searchParams: Promise<Record<string, string>>;
+}
+
+interface PaginatedSearchParams {
+  page?: number;
+  pageSize?: number;
+  query?: string;
+  filter?: string;
+  sort?: string;
+}

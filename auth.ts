@@ -1,13 +1,14 @@
+import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+
+import { IAccountDoc } from "./database/account.model";
+import { IUserDoc } from "./database/user.model";
 import { api } from "./lib/api";
 import { ActionResponse } from "./types/global";
-import { IAccountDoc } from "./database/account.model";
 import { SignInSchema } from "./lib/validation";
-import { IUserDoc } from "./database/user.model";
-import bcrypt from "bcryptjs";
-import Credentials from "next-auth/providers/credentials";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -19,15 +20,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;
+
           const { data: existingAccount } = (await api.accounts.getByProvider(
             email
           )) as ActionResponse<IAccountDoc>;
+
           if (!existingAccount) return null;
+
           const { data: existingUser } = (await api.users.getById(
             existingAccount.userId.toString()
           )) as ActionResponse<IUserDoc>;
 
           if (!existingUser) return null;
+
           const isValidPassword = await bcrypt.compare(
             password,
             existingAccount.password!
@@ -61,9 +66,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           )) as ActionResponse<IAccountDoc>;
 
         if (!success || !existingAccount) return token;
+
         const userId = existingAccount.userId;
+
         if (userId) token.sub = userId.toString();
       }
+
       return token;
     },
     async signIn({ user, profile, account }) {
@@ -87,6 +95,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       })) as ActionResponse;
 
       if (!success) return false;
+
       return true;
     },
   },

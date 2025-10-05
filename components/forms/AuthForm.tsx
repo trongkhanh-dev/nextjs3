@@ -58,8 +58,14 @@ const AuthForm = <T extends FieldValues>({
           : "Signed up successfully"
       );
 
-      // Auto sign in after successful sign up
+      // Auto sign in after successful sign up or sign in
       if (formType === "SIGN_UP") {
+        await signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          redirect: false,
+        });
+      } else if (formType === "SIGN_IN") {
         await signIn("credentials", {
           email: data.email,
           password: data.password,

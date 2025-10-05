@@ -9,26 +9,32 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { SheetClose } from "@/components/ui/sheet";
 
-const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
+const NavLinks = ({
+  isMobileNav = false,
+  userId,
+}: {
+  isMobileNav?: boolean;
+  userId?: string;
+}) => {
   const pathname = usePathname();
-  const userId = 1;
 
   return (
     <>
       {sidebarLinks.map((item) => {
-        const isActive =
-          (pathname.includes(item.route) && item.route.length > 1) ||
-          pathname === item.route;
+        let route = item.route;
 
         if (item.route === "/profile") {
           if (userId) {
-            item.route = `${item.route}/${userId}`;
+            route = `${item.route}/${userId}`;
           } else return null;
         }
 
+        const isActive =
+          (pathname.includes(route) && route.length > 1) || pathname === route;
+
         const ComponentLink = (
           <Link
-            href={item.route}
+            href={route}
             className={cn(
               isActive
                 ? "primary-gradient rounded-lg text-light-900"
