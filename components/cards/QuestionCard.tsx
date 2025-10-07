@@ -7,7 +7,7 @@ import TagCard from "./TagCard";
 import Metric from "../Metric";
 
 interface Props {
-  question: IQuestionCard["question"];
+  question: IQuestionCard;
 }
 const QuestionCard = ({ question }: Props) => {
   const { _id, title, tags, author, createdAt, upvotes, answers, views } =
@@ -41,6 +41,7 @@ const QuestionCard = ({ question }: Props) => {
           href={ROUTES.PROFILE(author._id)}
           textStyle="body-medium text-dark400_light700"
           isAuthor
+          titleStyles="max-sm hidden"
         />
         <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
           <Metric
@@ -64,7 +65,7 @@ const QuestionCard = ({ question }: Props) => {
           <Metric
             imageUrl="/icons/eye.svg"
             alt="Views"
-            value={views}
+            value={String(views)}
             title="Views"
             textStyle="small-medium text-dark400_light800"
           />

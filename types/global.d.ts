@@ -20,6 +20,7 @@ interface IQuestionCard {
   author: IAuthorQuestion;
   createdAt: Date | string;
   upvotes: number;
+  downvotes: number;
   answers: number;
   views: number;
 }
